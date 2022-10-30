@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 
 using BepInEx;
-using BepInEx.Logging;
+
 using HarmonyLib;
 
 using UnityEngine;
@@ -206,10 +206,6 @@ namespace Gizmo {
         HandleAxisInputLocalFrame(rotVector, _yGizmo);
       }
 
-      ZLog.Log(_xRot);
-      ZLog.Log(_yRot);
-      ZLog.Log(_zRot);
-
       RotateAxes(rotation, rotVector);
     }
 
@@ -258,7 +254,6 @@ namespace Gizmo {
         _xRot = (int)Math.Round(eulerAngles.x/ _snapAngle);
         _yRot = (int)Math.Round(eulerAngles.y / _snapAngle);
         _zRot = (int)Math.Round(eulerAngles.z / _snapAngle);
-        ZLog.Log("x:" + _xRot.ToString() + " y:" + _yRot.ToString() + " z:" + _zRot.ToString());
         Rotate();
       }
     }
