@@ -180,12 +180,7 @@ namespace Gizmo {
         HandleAxisInput(ref _yRot, _yGizmo);
       }
 
-      _comfyGizmo.transform.localRotation =
-          Quaternion.Euler(_xRot * _snapAngle, _yRot * _snapAngle, _zRot * _snapAngle);
-
-      _xGizmoRoot.localRotation = Quaternion.Euler(_xRot * _snapAngle, 0f, 0f);
-      _yGizmoRoot.localRotation = Quaternion.Euler(0f, _yRot * _snapAngle, 0f);
-      _zGizmoRoot.localRotation = Quaternion.Euler(0f, 0f, _zRot * _snapAngle);
+      RotateEuler(_xRot * _snapAngle, _yRot * _snapAngle, _zRot * _snapAngle);
     }
 
     static void RotateLocalFrame(int direction) {
@@ -211,12 +206,25 @@ namespace Gizmo {
         HandleAxisInputLocalFrame(rotVector, _yGizmo);
       }
 
+      ZLog.Log(_xRot);
+      ZLog.Log(_yRot);
+      ZLog.Log(_zRot);
+
       RotateAxes(rotation, rotVector);
     }
 
     static void RotateAxes(float rotation, Vector3 rotVector) {
       _comfyGizmo.transform.rotation *= Quaternion.AngleAxis(rotation, rotVector);
       _gizmoRoot.rotation *= Quaternion.AngleAxis(rotation, rotVector);
+    }
+
+    static void RotateEuler(float xRot, float yRot, float zRot) {
+      _comfyGizmo.transform.localRotation =
+      Quaternion.Euler(_xRot * _snapAngle, _yRot * _snapAngle, _zRot * _snapAngle);
+
+      _xGizmoRoot.localRotation = Quaternion.Euler(_xRot * _snapAngle, 0f, 0f);
+      _yGizmoRoot.localRotation = Quaternion.Euler(0f, _yRot * _snapAngle, 0f);
+      _zGizmoRoot.localRotation = Quaternion.Euler(0f, 0f, _zRot * _snapAngle);
     }
 
     static void HandleAxisInput(ref int rotation, Transform gizmo) {
@@ -245,9 +253,12 @@ namespace Gizmo {
         _gizmoRoot.rotation = targetQuaternion;
       } else {
         Vector3 eulerAngles = GetEulerAngles(target);
-        _xRot = (int)Math.Floor(eulerAngles.x/_snapAngle);
-        _yRot = (int)Math.Floor(eulerAngles.y / _snapAngle);
-        _zRot = (int)Math.Floor(eulerAngles.z / _snapAngle);
+        ResetRotations();
+        
+        _xRot = (int)Math.Round(eulerAngles.x/ _snapAngle);
+        _yRot = (int)Math.Round(eulerAngles.y / _snapAngle);
+        _zRot = (int)Math.Round(eulerAngles.z / _snapAngle);
+        ZLog.Log("x:" + _xRot.ToString() + " y:" + _yRot.ToString() + " z:" + _zRot.ToString());
         Rotate();
       }
     }
